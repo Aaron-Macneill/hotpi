@@ -1,23 +1,30 @@
 package hotpi
+
 import (
 	"io/ioutil"
 	"strconv"
 )
 
-
 var (
-	cpuTempDir = "/sys/class/thermal/thermal_zone0"
-	cpuTempFile = cpuTempDir + "/temp"
-	cpuCurrentFreq = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+	cpuTempDir     = "/sys/class/thermal/thermal_zone0"
+	cpuTempFile    = cpuTempDir + "/temp"
+	cpuFreqFile = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
 )
 
+func parseFile(filename string) ([]byte, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return data[:len(data)-2], nil
+}
+
 func CpuTemp() (float64, error) {
-	temp, err := ioutil.ReadFile(cpuTempFile)
+	tempBytes, err := parseFile(cpuTempFile)
 	if err != nil {
 		return 0, err
 	}
-	temp = temp[:len(temp)-2]
-	tempFloat, err := strconv.ParseFloat(string(temp), 64)
+	tempFloat, err := strconv.ParseFloat(string(tempBytes), 64)
 	if err != nil {
 		return 0, err
 	}
@@ -25,12 +32,11 @@ func CpuTemp() (float64, error) {
 }
 
 func CpuFreq() (float64, error) {
-	freq, err := ioutil.ReadFile(cpuCurrentFreq)
+	freqBytes, err := parseFile(cpuFreqFile)
 	if err != nil {
 		return 0, err
 	}
-	freq = freq[:len(freq)-2]
-	freqFloat , err := strconv.ParseFloat(string(freq), 64)
+	freqFloat, err := strconv.ParseFloat(string(freqBytes), 64)
 	if err != nil {
 		return 0, err
 	}

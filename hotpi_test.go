@@ -1,8 +1,8 @@
 package hotpi
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestCpuTemp(t *testing.T) {
