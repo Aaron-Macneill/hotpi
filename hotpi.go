@@ -6,7 +6,7 @@ import (
 
 
 var (
-	cpuTempDir = "/sys/class/thermal/thermal_zone"
+	cpuTempDir = "/sys/class/thermal/thermal_zone0"
 	cpuTempFile = cpuTempDir + "/temp"
 )
 
